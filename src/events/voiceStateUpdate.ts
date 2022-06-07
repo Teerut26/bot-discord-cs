@@ -1,20 +1,20 @@
-import { Client } from "discord.js";
+import { Client, VoiceState } from "discord.js";
 import db from "../config/firestore";
 import { voiceCollect } from "../interface/voiceCollect";
 
 module.exports = {
     name: "voiceStateUpdate",
-    async execute(client: Client, oldState: any, newState: any) {
-        const user: any = await client.users.fetch(newState.id);
-        const member:any = await newState.guild.members.fetch(user.id);
+    async execute(oldState: VoiceState, newState: VoiceState, client: Client) {
+        const user = await client.users.fetch(newState.id);
+        const member = await newState.guild.members.fetch(user.id);
         try {
-            const voiceChannelID: string = "983752420163190784"; // ตัวอย่างห้อง test
+            const voiceChannelID: string = "983768244148117504"; // ตัวอย่างห้อง test
 
             // user เข้ามาในห้อง 
-            if (!oldState.channel && newState.channel.id === voiceChannelID) {
+            if (!oldState.channel && newState.channel?.id === voiceChannelID) {
                 const channel = await newState.guild.channels.create(user.tag, {
                     type: 'GUILD_VOICE',
-                    parent: newState.channel.parent,
+                    parent: newState.channel.parent!,
                 });
                 channel.permissionOverwrites.create(user.id, {
                     MANAGE_CHANNELS: true,
@@ -35,9 +35,14 @@ module.exports = {
                 //user ออกจากห้องเสียง
             } else if(!newState.channel){ 
                 // Get ข้อมูลห้องใน db
-                const resultData = await db.collection("voiceCollectDB").doc(user.id).get();
-                if (!resultData) return;
-                if (oldState.channel.id === resultData.channel_ID) {
+                const resultData = await db.collection("voiceCollectDB").where("channel_ID","==",oldState.channel?.id).get();
+                if (resultData.size === 0) return;
+
+                let dataFromFirebase:voiceCollect[] = []
+                resultData.forEach((doc)=>{
+                    dataFromFirebase.push(doc.data() as voiceCollect)
+                })
+                if (oldState.channel?.id === dataFromFirebase[0]?.channel_ID) {
                     if (oldState.channel.members.size < 1) {
                       oldState.channel.delete();
                       // ลบข้อมูลออกจาก database
