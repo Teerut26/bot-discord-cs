@@ -32,26 +32,26 @@ module.exports = {
                     user_ID: user.id,
                     channel_ID: channel.id,
                 };
-                const res = await db.collection("voiceCollectDB").add(JSON.parse(JSON.stringify(data)));
+                const res = await db.collection("voiceCollectDB").doc(user.id).set(JSON.parse(JSON.stringify(data)));
 
                 //user ออกจากห้องเสียง
             } else if(!newState.channel){ 
                 // Get ข้อมูลห้องใน db
-                const resultData = await db.collection("voiceCollectDB").where("channel_ID","==",oldState.channel?.id).get();
-                if (resultData.size === 0) return;
+                const resultData = await db.collection("voiceCollectDB").doc(user.id).get();
+                if (!resultData.exists) return;
 
-                let dataFromFirebase:voiceCollect[] = []
-                resultData.forEach((doc)=>{
-                    dataFromFirebase.push({
-                        ...doc.data(),
-                        id:doc.id
-                    } as voiceCollect)
-                })
-                if (oldState.channel?.id === dataFromFirebase[0]?.channel_ID) {
-                    if (oldState.channel.members.size < 1) {
-                      oldState.channel.delete();
+                // let dataFromFirebase:voiceCollect[] = []
+                // resultData.forEach((doc)=>{
+                //     dataFromFirebase.push({
+                //         ...doc.data(),
+                //         id:doc.id
+                //     } as voiceCollect)
+                // })
+                if (oldState.channel?.id === resultData.data()?.channel_ID) {
+                    if (oldState.channel?.members.size! < 1) {
+                      oldState.channel?.delete();
                       // ลบข้อมูลออกจาก database
-                    await db.collection("voiceCollectDB").doc(dataFromFirebase[0].id!).delete()
+                    await db.collection("voiceCollectDB").doc(user.id).delete()
                     }
                   }
             }
