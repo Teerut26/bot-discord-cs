@@ -1,4 +1,5 @@
 export interface voiceCollect {
-    user_ID: string,
-    channel_ID: string,
+    id?: string;
+    user_ID: string;
+    channel_ID: string;
 }

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import { Client, VoiceState } from "discord.js";
 import db from "../config/firestore";
 import { voiceCollect } from "../interface/voiceCollect";
@@ -40,13 +42,16 @@ module.exports = {
 
                 let dataFromFirebase:voiceCollect[] = []
                 resultData.forEach((doc)=>{
-                    dataFromFirebase.push(doc.data() as voiceCollect)
+                    dataFromFirebase.push({
+                        ...doc.data(),
+                        id:doc.id
+                    } as voiceCollect)
                 })
                 if (oldState.channel?.id === dataFromFirebase[0]?.channel_ID) {
                     if (oldState.channel.members.size < 1) {
                       oldState.channel.delete();
                       // ลบข้อมูลออกจาก database
-                    await db.collection("voiceCollectDB").doc(user.id).delete()
+                    await db.collection("voiceCollectDB").doc(dataFromFirebase[0].id!).delete()
                     }
                   }
             }
