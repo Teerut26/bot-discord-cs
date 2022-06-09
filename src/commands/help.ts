@@ -11,7 +11,8 @@ module.exports = {
         messageEmbed
             .addField("/help", "``help command``")
             .addField("/tts", "``text to speech``")
-            .addField("/ping", "``ping pong``");
+            .addField("/ping", "``ping pong``")
+            .addField("/nlp", "``chatbot``")
 
         return await interaction.reply({ embeds: [messageEmbed] });
     },
