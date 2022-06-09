@@ -8,11 +8,16 @@ NODE_ENV=development|production
 FIREBASE_STORAGE_BUCKET=
 FIREBASE_CONFIG=
 
+REMOVE_BG_API_KEY=
+
+VIU_BASE_URL=
+VIU_TOKEN=
+
 ```
 
 ## tasks
 
-- [ ] เพิ่ม viu
+- [x] เพิ่ม viu
 - [ ] ระบบสุ่มคู่
 - [ ] ระบบประชาสัมพันธ์
 - [ ] ค้นหา
