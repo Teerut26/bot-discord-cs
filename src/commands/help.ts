@@ -13,6 +13,7 @@ module.exports = {
             .addField("/tts", "``text to speech``")
             .addField("/ping", "``ping pong``")
             .addField("/nlp", "``chatbot``")
+            .addField("/rg", "``ระบบสุ่มจับคู่``")
             .addField(">rm.bg", "``remove background image (attachment image file with command)``")
 
         return await interaction.reply({ embeds: [messageEmbed] });
