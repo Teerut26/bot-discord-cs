@@ -23,6 +23,10 @@ module.exports = {
         });
 
         messageEmbed.setDescription(description);
+        messageEmbed.setFooter({
+            text:"Viu",
+            iconURL:"https://play-lh.googleusercontent.com/y38XVJky8EEJbhG784ANEYuWYh0zWvCM8SYQ9HlMBpSQUmkk4HImFvc0H6VrtXEJ1sLu"
+        })
 
         return interaction.reply({ embeds: [messageEmbed] });
     },
