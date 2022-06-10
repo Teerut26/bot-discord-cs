@@ -16,7 +16,7 @@ module.exports = {
                 .setRequired(false)
         ),
     async execute(interaction: CommandInteraction, client: Client) {
-        let middle_word = interaction.options.getString("middle-word") ? interaction.options.getString("middle word") : "&"
+        let middle_word = interaction.options.getString("middle-word") ? interaction.options.getString("middle-word") : "&"
         let result = await interaction.guild?.members.fetch();
         let list_member = result
             ?.filter((member) => !member.user.bot)
